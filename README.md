@@ -17,7 +17,7 @@ sudo mv initual-enum /usr/local/bin/initial-enum
 ```
 3. Run script by providing IP address
 ```bash
-initial-enum 192.168.1.210
+sudo initial-enum 192.168.1.210
 ```
 
 ## Windows-AD-Privesc-Tools.py
