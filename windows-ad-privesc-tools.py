@@ -1,0 +1,123 @@
+#! /usr/bin/env python3
+
+import requests
+import subprocess
+from zipfile import ZipFile
+import os
+import certifi
+from io import BytesIO
+import pycurl
+
+# Script that downloads common Windows and AD Privesc tools locally to Kali machine
+
+# Remote links for windows privesc tools
+remote_links =[
+    'https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.bat',
+    'https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASany.exe',
+    'https://download.sysinternals.com/files/SysinternalsSuite.zip',
+    'https://github.com/rahuldottech/netcat-for-windows/releases/download/1.12/nc32.exe',
+    'https://github.com/rahuldottech/netcat-for-windows/releases/download/1.12/nc64.exe',
+    'https://github.com/ohpe/juicy-potato/releases/download/v0.1/JuicyPotato.exe',
+    'https://github.com/itm4n/PrintSpoofer/releases/download/v1.0/PrintSpoofer64.exe',
+    'https://github.com/itm4n/PrintSpoofer/releases/download/v1.0/PrintSpoofer32.exe',
+    'https://github.com/antonioCoco/RunasCs/releases/download/v1.5/RunasCs.zip',
+    'https://github.com/sailay1996/WerTrigger/archive/refs/heads/master.zip',
+    'https://github.com/Flangvik/SharpCollection/archive/refs/heads/master.zip'
+]
+
+# Local links for windows privesc tools
+local_links =[
+    '/usr/share/powershell-empire/empire/server/data/module_source/management/powercat.ps1',
+    '/usr/share/powershell-empire/empire/server/data/module_source/privesc/Sherlock.ps1',
+    '/usr/share/powershell-empire/empire/server/data/module_source/privesc/PowerUp.ps1',
+    '/usr/share/powershell-empire/empire/server/data/module_source/privesc/PrivescCheck.ps1',
+    '/usr/share/powershell-empire/empire/server/data/module_source/situational_awareness/network/powerview.ps1'
+]
+
+# Remote links for curl command
+remote_links_curl=[
+    'https://raw.githubusercontent.com/ParrotSec/mimikatz/master/Win32/mimikatz.exe',
+    #'https://raw.githubusercontent.com/ParrotSec/mimikatz/master/x64/mimikatz.exe',
+    'https://raw.githubusercontent.com/n00py/LAPSDumper/main/laps.py',
+    'https://raw.githubusercontent.com/BloodHoundAD/BloodHound/master/Collectors/SharpHound.ps1',
+    'https://raw.githubusercontent.com/61106960/adPEAS/main/adPEAS.ps1'
+]
+
+# Download privesc tools from github
+def download_remote():
+    for remote_link in remote_links:
+
+        file_name = remote_link.rsplit('/',1)[1]
+        if(file_name == 'master.zip'):
+            file_name = f"{remote_link.rsplit('/',5)[1]}.zip"
+        response = requests.get(remote_link)
+        with open(file_name, 'wb') as file:
+            print(f"[+] Downloading {file_name}...")
+            file.write(response.content)
+            file.close()
+            
+def download_remote_curl():
+    for remote_link in remote_links_curl:
+
+        # Get the file name
+        file_name = remote_link.rsplit('/',1)[1]
+        if(file_name == 'master.zip'):
+            file_name = f"{remote_link.rsplit('/',5)[1]}.zip"
+        ## Create PycURL instance
+        c = pycurl.Curl()
+
+        ## Define Options - Set URL we want to request
+        c.setopt(c.URL, remote_link)
+
+        ## Setup buffer to recieve response
+        buffer = BytesIO()
+        c.setopt(c.WRITEDATA, buffer)
+
+        ## Setup SSL certificates
+        c.setopt(c.CAINFO, certifi.where())
+
+        ## Make Request
+        c.perform()
+
+        c.close()
+
+        ## Retrieve the content BytesIO & Decode
+        body = buffer.getvalue()
+        file_contents = body.decode('iso-8859-1')
+        with open(file_name, 'w') as file:
+            file.write(file_contents)
+            file.close()
+            print(f"[+] Downloading {file_name}")
+
+# Copy privesc tools locally
+def download_local():
+    for local_link in local_links:
+        file_name = local_link.rsplit('/',1)[1]
+        print(f"[+] Downloading {file_name}...")
+        subprocess.call(f'sudo cp {local_link}  ./{file_name}', shell=True)
+
+# Create zip archive with tools
+def create_zip():
+    print("\n")
+    try:
+        os.remove("wintools.zip")
+    except FileNotFoundError:
+        pass
+    links = [remote_links,local_links,remote_links_curl]
+    for link_type in links:
+        for link in link_type:
+            file_name = link.rsplit('/',1)[1]
+            if(file_name == "master.zip"):
+                file_name = "Zip Archive"
+                continue
+            with ZipFile('wintools.zip','a') as zip:
+                print(f"[+] Adding {file_name} to wintools.zip")
+                zip.write(file_name)
+                subprocess.call(f'rm -rf {file_name}',shell=True)
+
+# Execute script                
+if __name__ == "__main__":
+    download_local()
+    download_remote()
+    download_remote_curl()
+    create_zip()
