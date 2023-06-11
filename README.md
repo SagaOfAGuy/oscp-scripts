@@ -4,7 +4,7 @@ Scripts for OSCP recon and privesc
 
 
 ## Initial-Enum.sh
-Script that runs an NMAP scan first, and pipes ports into `autorecon` 
+Script that runs an NMAP scan first, and pipes ports into `autorecon` in case `autorecon` misses ports from the start
 ### Usage
 1. Make script executable
 ```bash
