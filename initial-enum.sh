@@ -8,4 +8,5 @@ if [ $# -eq 0 ]
 fi
 
 # Function that performs enumeration
-sudo nmap -Pn -T5 -p- $1 -v | grep Discovered | awk -F " " '{print substr($4,1,length($4)-4)}' | tee ports.txt && tr '\n' , < ports.txt > ports_csv.txt && autorecon $1 -p `cat ports_csv.txt`
+ports=$(sudo nmap -Pn -T5 -p- $1 -v | grep Discovered | awk -F " " '{print substr($4,1,length($4)-4)}')
+autorecon $1 -p $(echo $ports | tr ' ' ',')

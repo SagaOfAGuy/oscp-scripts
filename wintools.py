@@ -8,8 +8,6 @@ import certifi
 from io import BytesIO
 import pycurl
 
-# Script that downloads common Windows and AD Privesc tools locally to Kali machine
-
 # Remote links for windows privesc tools
 remote_links =[
     'https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEAS.bat',
@@ -22,7 +20,11 @@ remote_links =[
     'https://github.com/itm4n/PrintSpoofer/releases/download/v1.0/PrintSpoofer32.exe',
     'https://github.com/antonioCoco/RunasCs/releases/download/v1.5/RunasCs.zip',
     'https://github.com/sailay1996/WerTrigger/archive/refs/heads/master.zip',
-    'https://github.com/Flangvik/SharpCollection/archive/refs/heads/master.zip'
+    'https://github.com/Flangvik/SharpCollection/archive/refs/heads/master.zip',
+    'https://github.com/AlessandroZ/LaZagne/releases/download/v2.4.5/LaZagne.exe',
+    'https://github.com/nicocha30/ligolo-ng/releases/download/v0.4.3/ligolo-ng_agent_0.4.3_Windows_64bit.zip',
+    'https://github.com/nicocha30/ligolo-ng/releases/download/v0.4.3/ligolo-ng_agent_0.4.3_Linux_64bit.tar.gz',
+    'https://github.com/BeichenDream/GodPotato/releases/download/V1.20/GodPotato-NET4.exe'
 ]
 
 # Local links for windows privesc tools
@@ -36,8 +38,7 @@ local_links =[
 
 # Remote links for curl command
 remote_links_curl=[
-    'https://raw.githubusercontent.com/ParrotSec/mimikatz/master/Win32/mimikatz.exe',
-    #'https://raw.githubusercontent.com/ParrotSec/mimikatz/master/x64/mimikatz.exe',
+    'https://raw.githubusercontent.com/ParrotSec/mimikatz/master/x64/mimikatz.exe',
     'https://raw.githubusercontent.com/n00py/LAPSDumper/main/laps.py',
     'https://raw.githubusercontent.com/BloodHoundAD/BloodHound/master/Collectors/SharpHound.ps1',
     'https://raw.githubusercontent.com/61106960/adPEAS/main/adPEAS.ps1'
@@ -55,7 +56,8 @@ def download_remote():
             print(f"[+] Downloading {file_name}...")
             file.write(response.content)
             file.close()
-            
+
+
 def download_remote_curl():
     for remote_link in remote_links_curl:
 
@@ -89,6 +91,9 @@ def download_remote_curl():
             file.close()
             print(f"[+] Downloading {file_name}")
 
+
+
+
 # Copy privesc tools locally
 def download_local():
     for local_link in local_links:
@@ -103,6 +108,7 @@ def create_zip():
         os.remove("wintools.zip")
     except FileNotFoundError:
         pass
+
     links = [remote_links,local_links,remote_links_curl]
     for link_type in links:
         for link in link_type:
@@ -115,7 +121,14 @@ def create_zip():
                 zip.write(file_name)
                 subprocess.call(f'rm -rf {file_name}',shell=True)
 
-# Execute script                
+    # leftover WerTrigger,zip and SharpCollection.zip zip files since links refer to
+    with ZipFile('wintools.zip', 'a') as zip:
+        print("[+] Adding leftover zip files to wintools.zip...")
+        zip.write("SharpCollection.zip")
+        zip.write("WerTrigger.zip")
+        subprocess.call('rm -rf WerTrigger.zip SharpCollection.zip',shell=True)
+
+
 if __name__ == "__main__":
     download_local()
     download_remote()
