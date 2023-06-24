@@ -7,3 +7,4 @@ List of tools:
 - [powershell_base64.py](powershell-rev/README.md)
 - [initial-enum.sh](initial-enum/README.md)
 - [web-enum.sh](web-enum/README.md)
+- [lintools](lintools/READHME.md)
