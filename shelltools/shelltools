@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# List of reverse shells including PHP, ASPX, JSP webshells
+shells=( "/usr/share/webshells/php/simple-backdoor.php" "/usr/share/webshells/php/php-reverse-shell.php" "/usr/share/webshells/asp/cmdasp.asp" "/usr/share/webshells/asp/cmdasp.asp" "/usr/share/webshells/jsp/cmdjsp.jsp" "/usr/share/webshells/jsp/jsp-reverse.jsp" "/usr/share/webshells/perl/perlcmd.cgi" "/usr/share/webshells/perl/perl-reverse-shell.pl")
+
+# Copy files to current directory
+for shell in "${shells[@]}";
+do
+	sudo cp $shell .
+    printf "[+] Downloading $shell to current directory\n"
+done
