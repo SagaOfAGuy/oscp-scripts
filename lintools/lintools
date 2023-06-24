@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Tool to download linux privesc tools to current directory
+
+trap "exit" INT
+
+# Copy unix privesc check
+sudo cp /usr/share/unix-privesc-check/unix-privesc-check . && [ -f ./unix-privesc-check ] && printf "[+] unix-privesc-check downloaded to current directory\n" || printf "[-] Problem moving unix-privesc-check to current directory\n"
+
+# Download linpeas
+wget -q https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh && [ -f ./linpeas.sh ] &&  (printf "[+] Downloaded linpeas.sh\n" && chmod +x linpeas.sh) || printf "[-] Download issue. linpeas.sh not downloaded\n"
+curl -s https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh > LinEnum.sh && [ -f ./LinEnum.sh ] &&  (printf "[+] Downloaded LinEnum.sh\n" && chmod +x LinEnum.sh) || printf "[-] Download issue. LinEnum.sh not downloaded\n"
+curl -s https://raw.githubusercontent.com/The-Z-Labs/linux-exploit-suggester/master/linux-exploit-suggester.sh > lse.sh && [ -f ./lse.sh ] &&  (printf "[+] Downloaded linpeas.sh\n" && chmod +x lse.sh) || printf "[-] Download issue. lse.sh not downloaded\n"
+curl -s https://raw.githubusercontent.com/sleventyeleven/linuxprivchecker/master/linuxprivchecker.py > linuxprivchecker.py && [ -f ./linuxprivchecker.py ] &&  (printf "[+] Downloaded linuxprivchecker.py\n" && chmod +x linuxprivchecker.py) || printf "[-] Download issue. linuxprivchecker.py not downloaded\n"
+
+# Package tools in lintools.zip
+zip lintools.zip linuxprivchecker.py lse.sh LinEnum.sh linpeas.sh
+printf "[+] Created lintools.zip package\n"
+
+# Clean up files
+printf "[+] Cleaning up files...\n"
+rm -rf linpeas.sh LinEnum.sh linuxprivchecker.py unix-privesc-check lse.sh
+
+# Start webserver
+printf "[+] Starting Python webserver on port 443\n"
+pkill python3
+python3 -m http.server 443 &>/dev/null &
+
+# Find python http server process ID 
+process_id=`ps -ef | grep 'python3 -m http.server 443' | awk 'NR==1{print $2}'`
+printf "[+] Python3 HTTP service is listening on process PID $process_id"
