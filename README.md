@@ -24,4 +24,5 @@ chmod +x install.sh
 ![Alt text](image-1.png)
 
 3. Verify installation of scripts to `/usr/local/bin`
+
 ![Alt text](image.png)
