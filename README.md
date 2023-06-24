@@ -8,3 +8,4 @@ List of tools:
 - [initial-enum.sh](initial-enum/README.md)
 - [web-enum.sh](web-enum/README.md)
 - [lintools](lintools/READHME.md)
+- [shelltools](shelltools/README.md)
