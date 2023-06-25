@@ -5,14 +5,19 @@ List of tools:
 
 Windows Privilege Escalation Tools
 - [wintools.py](wintools/README.md)
+
 Powershell Base64 Reverse Shell Generator
 - [powershell_base64.py](powershell-rev/README.md)
+
 Initial Enum Script
 - [initial-enum.sh](initial-enum/README.md)
+
 Web Enumeration
 - [web-enum.sh](web-enum/README.md)
+
 Linux Privilege Escalation Tools
 - [lintools](lintools/README.md)
+
 Webshells
 - [shelltools](shelltools/README.md)
 
