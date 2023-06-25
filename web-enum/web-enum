@@ -71,7 +71,7 @@ curl -s http://$1:$2 &> source.txt
 printf "[x] Running cmsmap scans...\n"
 cmsmap http://$1 &> cmsmap.txt
 cmseek --url http://$1 &>cmseek.txt
-wpscan --url http://$1 &> wpscan.txt
+wpscan --no-update --url http://$1 &> wpscan.txt
 joomscan --url http://$1 &> joomscan.txt
 droopescan scan drupal -u http://$1 &> droopescan.txt
 droopescan scan silverstripe -u http://$1 &> droopescan-silver.txt
