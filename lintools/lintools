@@ -14,7 +14,7 @@ curl -s https://raw.githubusercontent.com/The-Z-Labs/linux-exploit-suggester/mas
 curl -s https://raw.githubusercontent.com/sleventyeleven/linuxprivchecker/master/linuxprivchecker.py > linuxprivchecker.py && [ -f ./linuxprivchecker.py ] &&  (printf "[+] Downloaded linuxprivchecker.py\n" && chmod +x linuxprivchecker.py) || printf "[-] Download issue. linuxprivchecker.py not downloaded\n"
 
 # Package tools in lintools.zip
-tar -czvf lintools.tar.gz $PWD/{linuxprivchecker.py,lse.sh,LinEnum.sh,linpeas.sh}
+tar -czvf lintools.tar.gz linuxprivchecker.py unix-privesc-check lse.sh LinEnum.sh linpeas.sh
 printf "[+] Created lintools.zip package\n"
 
 # Clean up files
