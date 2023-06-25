@@ -15,7 +15,7 @@ curl -s https://raw.githubusercontent.com/sleventyeleven/linuxprivchecker/master
 
 # Package tools in lintools.zip
 tar -czvf lintools.tar.gz linuxprivchecker.py unix-privesc-check lse.sh LinEnum.sh linpeas.sh
-printf "[+] Created lintools.zip package\n"
+printf "[+] Created lintools.tar.gz package\n"
 
 # Clean up files
 printf "[+] Cleaning up files...\n"
