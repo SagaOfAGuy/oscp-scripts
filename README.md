@@ -12,7 +12,7 @@ List of tools:
 ## Web Enumeration
 - [web-enum.sh](web-enum/README.md)
 ## Linux Privilege Escalation Tools
-- [lintools](lintools/READHME.md)
+- [lintools](lintools/README.md)
 ## Webshells
 - [shelltools](shelltools/README.md)
 
