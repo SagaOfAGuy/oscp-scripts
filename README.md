@@ -20,6 +20,8 @@ List of tools:
 <b><u>Network Pivoting</u></b>
 - [ligolo-setup](ligolo-setup/README.md) - Downloads Ligolo-ng, provides instructions on how to setup pivots for reverse shell and file transfers
 
+- [lin-shell-upgrade](lin-shell-upgrade/README.md) - Copies and pastes the command needed to upgrade a reverse shell to the clipboard. Simply copy and paste in the target reverse shell terminal, and the shell should be an improved bash session. 
+
 ## Installation
 Use the `install.sh` script after downloading this repo to install the scripts to `/usr/local/bin` to run the scripts globally in the terminal.
 
