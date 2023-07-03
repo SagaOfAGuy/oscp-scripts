@@ -25,4 +25,4 @@ lin-shell-upgrade
 
 4. After the script runs, it will copy the command `python3 -c 'import pty; pty.spawn("/bin/bash")' && export SHELL=bash && export TERM=xterm && stty rows 38 columns 116` to the clipboard. We can then paste this one-liner in our initial reverse shell to upgrade it.
 
-If the target doesn't have `python3`, try to copy and paste the `python` one-liner instead. 
+If the target doesn't have `python3`, try to copy and paste the `python` one-liner instead.
