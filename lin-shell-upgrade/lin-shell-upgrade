@@ -1,13 +1,20 @@
 #!/bin/bash
 
+# RED color outline
+RED="\e[31m"
+
+# GREEN color outline
+GREEN="\e[32m"
+
+# END color outline
+ENDCOLOR="\e[0m"
 
 #cmd_py = "python -c 'import pty; pty.spawn("/bin/bash")' && export SHELL=bash && export TERM=xterm && stty rows 38 columns 116"
-cmd_py="python -c 'import pty; pty.spawn(\"/bin/bash\")' && export SHELL=bash && export TERM=xterm && stty rows 38 columns 116"
-cmd_py3="python3 -c 'import pty; pty.spawn(\"/bin/bash\")' && export SHELL=bash && export TERM=xterm && stty rows 38 columns 116"
-printf "[+] Upgrade shell for python3 has been copied to the clipboard\n"
+cmd_py="python -c 'import pty; pty.spawn(\"/bin/bash\")';export SHELL=bash; export TERM=xterm; tty rows 38 columns 116"
+cmd_py3="python3 -c 'import pty; pty.spawn(\"/bin/bash\")';  export SHELL=bash; export TERM=xterm; stty rows 38 columns 116"
+printf "${GREEN}[+]${ENDCOLOR} Upgrade shell for python3 has been copied to the clipboard\n"
 echo $cmd_py3| xclip -selection clipboard
-printf "[+] In case the version of python is different i.e python2, here are the commands to upgrade a reverse shell:\n\n\n"
+printf "${GREEN}[+]${ENDCOLOR} In case the version of python is different i.e python2, here are the commands to upgrade a reverse shell:\n\n\n"
 
-echo -e "$cmd_py3\n"
-echo -e "$cmd_py\n"
-
+echo -e "${RED}$cmd_py3${RED}\n"
+echo -e "${RED}$cmd_py${RED}\n"
