@@ -9,79 +9,88 @@ if [ $# -lt 2 ]
     exit
 fi
 
+
+# Colors
+GREEN="\e[32m"
+BLUE="\e[34m"
+ENDCOLOR="\e[0m"
+SUCCESS="${GREEN}[+]${ENDCOLOR}"
+INFO="${BLUE}[*]${ENDCOLOR}"
+DIR="web-enum-$1-$2"
+
+
+mkdir $DIR
+
+
 trap "exit" INT
 # Grab banners
-printf "[x] Grabbing web server banner version...\n"
-nc -nv -q $1 $2 &> banner.txt
+printf "$INFO Grabbing web server banner version...\n"
+nc -w 5 -zv $1 $2 &> $DIR/banner.txt
+
 
 # Searchsploit search
-printf "[x] Run a searchsploit scan via the command: searchsploit <Banner Version>\n"
+printf "$INFO Run a searchsploit scan via the command: searchsploit <Banner Version>\n"
 
 # Check for robots.txt
-printf "[x] Getting robots.txt if it exists...\n"
-curl -X GET http://$1:$2/robots.txt &> "$2_robots.txt"
+printf "$INFO Getting robots.txt if it exists...\n"
+curl -X GET http://$1:$2/robots.txt &> $DIR/"$2_robots-$1.txt"
 
 
 
 # Run some dirbusting
-printf "[x] Running directory busting scans...\n"
-printf "[x] Running common.txt scan...\n"
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt -o gobuster-$1-common.txt
-printf "[x] Running seclists small.txt scan...\n"
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-small.txt -o gobuster-$1-small.txt
-printf "[x] Running seclists medium.txt scan...\n"
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -o gobuster-$1-medium.txt
-printf "[x] Running seclists big.txt scan...\n"
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-big.txt -o gobuster-$1-big.txt
+printf "$INFO Running directory busting scans...\n"
+printf "$INFO Running common.txt scan...\n"
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt -o $DIR/gobuster-$1-$2-common.txt
+printf "$INFO Running seclists small.txt scan...\n"
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-small.txt -o $DIR/gobuster-$1-$2-small.txt
+printf "$INFO Running seclists medium.txt scan...\n"
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -o $DIR/gobuster-$1-$2-medium.txt
+printf "$INFO Running seclists big.txt scan...\n"
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-big.txt -o $DIR/gobuster-$1-$2-big.txt
 
 
 # Fuzzing on Apache systems
-printf "[x] Running apache fuzzing scans...\n"
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/apache.txt -o apache.txt
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/apacheFuzz.txt -o apacheFuzz.txt
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/apacheTomcat.txt -o apacheTomcat.txt
+printf "$INFO Running apache fuzzing scans...\n"
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/apache.txt -o $DIR/apache-$1-$2.txt
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/apacheFuzz.txt -o $DIR/apacheFuzz-$1-$2.txt
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/apacheTomcat.txt -o $DIR/apacheTomcat-$1-$2.txt
 
 
 # Fuzzing nginx systems
-printf "[x] Running nginx fuzzing...\n"
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/nginx.txt -o nginx.txt
+printf "$INFO Running nginx fuzzing...\n"
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/nginx.txt -o $DIR/nginx-$1-$2.txt
 
 
 # Fuzzing IIS
-printf "[x] Running IIS fuzzing...\n"
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/iis-systemweb.txt -o iis-systemweb.txt
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/IIS.fuzz.txt -o IIS.fuzz.txt
+printf "$INFO Running IIS fuzzing...\n"
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/iis-systemweb.txt -o $DIR/iis-systemweb-$1-$2.txt
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/IIS.fuzz.txt -o $DIR/IIS-fuzz-$1-$2txt
 
 
 # CMS fuzzing
-printf "Running CMS fuzzing scans...\n"
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/wordpress.fuzz.txt -o wordpress.txt
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/wp-plugins.fuzz.txt -o wpplugin.txt
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/wp-themes.fuzz.txt -o wpthemes.txt
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/joomla-plugins.fuzz.txt -o joomla-plugins.txt
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/joomla-themes.fuzz.txt -o joomla-themes.txt
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/drupal-themes.fuzz.txt -o drupal-themes.txt
-feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/Drupal.txt -o Drupal.txt
+printf "$INFO Running CMS fuzzing scans...\n"
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/wordpress.fuzz.txt -o $DIR/wordpress.txt
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/wp-plugins.fuzz.txt -o $DIR/wpplugin.txt
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/wp-themes.fuzz.txt -o $DIR/wpthemes.txt
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/joomla-plugins.fuzz.txt -o $DIR/joomla-plugins.txt
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/joomla-themes.fuzz.txt -o $DIR/joomla-themes.txt
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/drupal-themes.fuzz.txt -o $DIR/drupal-themes.txt
+feroxbuster -u http://$1:$2 -k -w /usr/share/wordlists/seclists/Discovery/Web-Content/CMS/Drupal.txt -o $DIR/Drupal.txt
 
 # Get page source
-printf "[x] Grabbing source code of main page...\n"
-curl -s http://$1:$2 &> source.txt
+printf "$INFO Grabbing source code of main page...\n"
+curl -s http://$1:$2 &> $DIR/source.txt
 
 # CMS detection checks
-printf "[x] Running cmsmap scans...\n"
-cmsmap http://$1 &> cmsmap.txt
-cmseek --url http://$1 &>cmseek.txt
-wpscan --no-update --url http://$1 &> wpscan.txt
-joomscan --url http://$1 &> joomscan.txt
-droopescan scan drupal -u http://$1 &> droopescan.txt
-droopescan scan silverstripe -u http://$1 &> droopescan-silver.txt
+printf "$INFO Running cmsmap scans...\n"
+cmsmap http://$1 &> $DIR/cmsmap.txt
+cmseek --url http://$1 &> $DIR/cmseek.txt
+wpscan --no-update --url http://$1 &> $DIR/wpscan.txt
+joomscan --url http://$1 &> $DIR/joomscan.txt
+droopescan scan drupal -u http://$1 &> $DIR/droopescan.txt
+droopescan scan silverstripe -u http://$1 &> $DIR/droopescan-silver.txt
 
 # Run a nikto scan
-printf "[x] Running nikto scan on target...\n"
-nikto -host $1 &> nikto.txt
-
-
-
-
-
+printf "$INFO Running nikto scan on target...\n"
+nikto -host $1 &> $DIR/nikto-$1-$2.txt
 
