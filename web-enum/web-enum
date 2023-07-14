@@ -3,9 +3,9 @@
 # Check for parameters
 if [ $# -lt 2 ]
   then
-    printf "No arguments supplied. Please supply a valid IP address and port to scan"
-    printf "Usage: web-enum IP PORT"
-    printf "Example: web-enum 127.0.0.1 80" 
+    printf "No arguments supplied. Please supply a valid IP address and port to scan\n"
+    printf "Usage: web-enum IP PORT\n"
+    printf "Example: web-enum 127.0.0.1 80\n" 
     exit
 fi
 
