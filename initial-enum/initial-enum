@@ -14,6 +14,13 @@ ENDCOLOR="\e[0m"
 SUCCESS="${GREEN}[+]${ENDCOLOR}"
 INFO="${BLUE}[*]${ENDCOLOR}"
 
+# Run nmap top 100 UDP scan first
+printf "$SUCCESS Performing UDP Scans with Nmap...\n"
+sudo nmap -T5 -sU -sV --top-ports=100 $IP -v | tee nmap-udp-top-100.txt 
+sudo nmap -T5 -sU -sV --top-ports=50 $IP -v | tee nmap-udp-top-50.txt 
+sudo nmap -T5 -sU -sV --top-ports=20 $IP -v | tee nmap-udp-top-20.txt 
+sudo nmap -T5 -sU -sV --top-ports=10 $IP -v | tee nmap-udp-top-10.txt 
+
 # Function that performs enumeration
 printf "$SUCCESS Scanning $1 with Nmap...\n" 
 ports=$(sudo nmap -Pn -T5 -p- $1 -v | grep Discovered | awk -F " " '{print substr($4,1,length($4)-4)}')
