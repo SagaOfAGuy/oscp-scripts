@@ -16,10 +16,10 @@ INFO="${BLUE}[*]${ENDCOLOR}"
 
 # Run nmap top 100 UDP scan first
 printf "$SUCCESS Performing UDP Scans with Nmap...\n"
-sudo nmap -T5 -sU -sV --top-ports=100 $IP -v | tee nmap-udp-top-100.txt 
-sudo nmap -T5 -sU -sV --top-ports=50 $IP -v | tee nmap-udp-top-50.txt 
-sudo nmap -T5 -sU -sV --top-ports=20 $IP -v | tee nmap-udp-top-20.txt 
-sudo nmap -T5 -sU -sV --top-ports=10 $IP -v | tee nmap-udp-top-10.txt 
+sudo nmap -T5 -sU -sV --top-ports=100 $1 -v | tee nmap-udp-top-100.txt 
+sudo nmap -T5 -sU -sV --top-ports=50 $1 -v | tee nmap-udp-top-50.txt 
+sudo nmap -T5 -sU -sV --top-ports=20 $1 -v | tee nmap-udp-top-20.txt 
+sudo nmap -T5 -sU -sV --top-ports=10 $1 -v | tee nmap-udp-top-10.txt 
 
 # Function that performs enumeration
 printf "$SUCCESS Scanning $1 with Nmap...\n" 
