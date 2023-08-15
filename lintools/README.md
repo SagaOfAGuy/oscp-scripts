@@ -11,6 +11,6 @@ sudo mv lintools /usr/local/bin/lintools
 ```
 2. Execute script
 ```bash
-lintools
+./lintools
 ```
 ![Alt text](image.png)
