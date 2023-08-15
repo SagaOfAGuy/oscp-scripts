@@ -60,7 +60,7 @@ printf "[+] Created lintools.tar.gz package\n"
 
 # Clean up files
 printf "[+] Cleaning up files...\n"
-rm -rf CVE-2023-32233-exploit CVE-2021-25636-exploit CVE-2021-22555-exploit CVE-2022-0847-exploit-2 CVE-2022-0847-exploit-1 CVE-2021-4034-exploit CVE-2021-3156-exploit linpeas.sh LinEnum.sh linuxprivchecker.py unix-privesc-check les.sh
+sudo rm -rf CVE-2023-32233-exploit CVE-2021-25636-exploit CVE-2021-22555-exploit CVE-2022-0847-exploit-2 CVE-2022-0847-exploit-1 CVE-2021-4034-exploit CVE-2021-3156-exploit linpeas.sh LinEnum.sh linuxprivchecker.py unix-privesc-check les.sh
 
 # Start webserver
 printf "[+] Starting Python webserver on port 443\n"
