@@ -14,8 +14,8 @@ curl -s https://raw.githubusercontent.com/The-Z-Labs/linux-exploit-suggester/mas
 curl -s https://raw.githubusercontent.com/sleventyeleven/linuxprivchecker/master/linuxprivchecker.py > linuxprivchecker.py && [ -f ./linuxprivchecker.py ] &&  (printf "[+] Downloaded linuxprivchecker.py\n" && chmod +x linuxprivchecker.py) || printf "[-] Download issue. linuxprivchecker.py not downloaded\n"
 
 # Kernel exploit dependencies
-sudo apt update && apt-get install libcap-dev libfuse-dev
-sudo apt-get install -y libnftnl-dev
+sudo apt install libcap-dev libfuse-dev -y
+sudo apt install -y libnftnl-dev
 
 # Sudo - CVE-2021-3156
 git clone https://github.com/blasty/CVE-2021-3156.git
