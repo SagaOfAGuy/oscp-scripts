@@ -16,12 +16,10 @@ INFO="${BLUE}[*]${ENDCOLOR}"
 
 # Run nmap top 100 UDP scan first
 printf "$SUCCESS Performing UDP Scans with Nmap...\n"
-<<<<<<< HEAD
 sudo nmap -T5 -sU -sV --top-ports=100 $1 -v | tee nmap-udp-top-100-$1.txt 
-=======
+
 sudo nmap -T5 -sU -sV --top-ports=100 $1 -v | tee nmap-udp-top-100.txt 
 sudo nmap -T5 -sU -sV --top-ports=10 $1 -v | tee nmap-udp-top-10.txt 
->>>>>>> d89870fcffcd1f1a7dd80a1fc74e2f7d13e23368
 
 # Function that performs enumeration
 printf "$SUCCESS Scanning $1 with Nmap...\n" 
