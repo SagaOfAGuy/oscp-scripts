@@ -120,7 +120,7 @@ def create_zip():
             with ZipFile('wintools.zip','a') as zip:
                 print(f"[+] Adding {file_name} to wintools.zip")
                 zip.write(file_name)
-                subprocess.call(f'rm -rf {file_name}',shell=True)
+                subprocess.call(f'sudo rm -rf {file_name}',shell=True)
 
     # leftover WerTrigger,zip and SharpCollection.zip zip files since links refer to
     with ZipFile('wintools.zip', 'a') as zip:
