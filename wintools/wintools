@@ -41,7 +41,8 @@ remote_links_curl=[
     'https://raw.githubusercontent.com/ParrotSec/mimikatz/master/x64/mimikatz.exe',
     'https://raw.githubusercontent.com/n00py/LAPSDumper/main/laps.py',
     'https://raw.githubusercontent.com/BloodHoundAD/BloodHound/master/Collectors/SharpHound.ps1',
-    'https://raw.githubusercontent.com/61106960/adPEAS/main/adPEAS.ps1'
+    'https://raw.githubusercontent.com/61106960/adPEAS/main/adPEAS.ps1',
+    'https://raw.githubusercontent.com/fashionproof/EnableAllTokenPrivs/master/EnableAllTokenPrivs.ps1'
 ]
 
 # Download privesc tools from github
