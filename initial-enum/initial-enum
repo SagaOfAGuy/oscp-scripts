@@ -22,7 +22,7 @@ for ip in "$@"
 do
 	# UDP Scan
 	printf "$SUCCESS Performing UDP Scans on $ip with Nmap...\n"
-	sudo nmap -T5 -sU -sV --top-ports=100 $ip -v | tee nmap-udp-top-100-$ip.txt
+	sudo nmap -Pn -T5 -sU -sV --top-ports=100 $ip -v | tee nmap-udp-top-100-$ip.txt
 
 	# TCP Scan
 	printf "$SUCCESS Performing TCP Scans on $ip with Nmap...\n" 
