@@ -3,9 +3,11 @@
 # Check arguments
 if [ $# -eq 0 ]
   then
-    echo "No arguments supplied. Please supply a valid IP address to scan"
+    printf "No arguments supplied. Please supply a valid IP address or addresses to scan\nExample: initial-enum 192.168.12.201\ninitial-enum 192.168.12.34 192.168.12.101"
+    
     exit
 fi
+
 
 # Colors
 GREEN="\e[32m"
@@ -14,20 +16,22 @@ ENDCOLOR="\e[0m"
 SUCCESS="${GREEN}[+]${ENDCOLOR}"
 INFO="${BLUE}[*]${ENDCOLOR}"
 
-# Run nmap top 100 UDP scan first
-printf "$SUCCESS Performing UDP Scans with Nmap...\n"
-sudo nmap -T5 -sU -sV --top-ports=100 $1 -v | tee nmap-udp-top-100-$1.txt 
-sudo nmap -T5 -sU -sV --top-ports=10 $1 -v | tee nmap-udp-top-10-$1.txt 
-
-# Function that performs enumeration
-printf "$SUCCESS Scanning $1 with Nmap...\n" 
-ports=$(sudo nmap -Pn -T5 -p- $1 -v | grep Discovered | awk -F " " '{print substr($4,1,length($4)-4)}')
-printf "$SUCCESS Ports found by nmap:\n"
-for port in `echo $ports`; 
+for ip in "$@"
 do
-	printf "$INFO $port\n"
+	# Run nmap top 100 UDP scan first
+	printf "$SUCCESS Performing UDP Scans with Nmap...\n"
+	sudo nmap -T5 -sU -sV --top-ports=100 $ip -v | tee nmap-udp-top-100-$ip.txt 
+	sudo nmap -T5 -sU -sV --top-ports=10 $ip -v | tee nmap-udp-top-10-$ip.txt 
+	
+	# Function that performs enumeration
+	printf "$SUCCESS Scanning $ip with Nmap...\n" 
+	ports=$(sudo nmap -Pn -T5 -p- $ip -v | grep Discovered | awk -F " " '{print substr($4,1,length($4)-4)}')
+	printf "$SUCCESS Ports found by nmap:\n"
+	for port in `echo $ports`; 
+	do
+		printf "$INFO $port\n"
+	done
+	
+	printf "$PLUS Running autorecon now...\n"
+	autorecon $ip -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
 done
-
-printf "$PLUS Running autorecon now...\n"
-autorecon $1 -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
-
