@@ -25,7 +25,7 @@ do
 	
 	# Function that performs enumeration
 	printf "$SUCCESS Scanning $ip with Nmap...\n" 
-	ports=$(sudo nmap -Pn -T5 -p- $ip -v | grep Discovered | awk -F " " '{print substr($4,1,length($4)-4)}')
+	ports=$(sudo nmap -Pn -T5 -p- $ip -v | grep Discovered | awk -F " " '{print substr($4,1,length($4)-4)}' &)
 	printf "$SUCCESS Ports found by nmap:\n"
 	for port in `echo $ports`; 
 	do
