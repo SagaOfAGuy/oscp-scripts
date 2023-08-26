@@ -20,8 +20,8 @@ for ip in "$@"
 do
 	# Run nmap top 100 UDP scan first
 	printf "$SUCCESS Performing UDP Scans with Nmap...\n"
-	sudo nmap -T5 -sU -sV --top-ports=100 $ip -v | tee nmap-udp-top-100-$ip.txt 
-	sudo nmap -T5 -sU -sV --top-ports=10 $ip -v | tee nmap-udp-top-10-$ip.txt 
+	sudo nmap -T5 -sU -sV --top-ports=100 $ip -v | tee nmap-udp-top-100-$ip.txt &
+	sudo nmap -T5 -sU -sV --top-ports=10 $ip -v | tee nmap-udp-top-10-$ip.txt &
 	
 	# Function that performs enumeration
 	printf "$SUCCESS Scanning $ip with Nmap...\n" 
@@ -33,5 +33,5 @@ do
 	done
 	
 	printf "$PLUS Running autorecon now...\n"
-	autorecon $ip -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
+	autorecon $ip -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt &
 done
