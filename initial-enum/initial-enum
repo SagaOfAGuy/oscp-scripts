@@ -33,5 +33,5 @@ do
 	done
 	
 	printf "$PLUS Running autorecon now...\n"
-	autorecon $ip -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt &
+	autorecon $ip -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
 done
