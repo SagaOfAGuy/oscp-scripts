@@ -28,11 +28,3 @@ do
 	printf "$SUCCESS Performing TCP Scans on $ip with Nmap...\n" 
 	sudo nmap -Pn -T5 -p- $ip -v | tee nmap-tcp-$ip.txt &
 done
-
-# Run autorecon
-for ip in "$@"
-do
-	
-	ports=$(cat nmap-tcp-$ip.txt | grep Discovered | awk -F " " '{print substr($4,1,length($4)-4)}')
-	autorecon $ip -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt &; fg
-done
