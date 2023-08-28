@@ -1,0 +1,38 @@
+#!/bin/bash
+
+touch -a ./target.txt
+
+# Check if target.txt is empty. Exit if empty
+[ -s ./target.txt ] && (echo "target.txt is loaded!") || (echo "target.txt is empty. Please populate target.txt with target IPs and try again" && exit)
+
+# Colors
+GREEN="\e[32m"
+BLUE="\e[34m"
+ENDCOLOR="\e[0m"
+SUCCESS="${GREEN}[+]${ENDCOLOR}"
+INFO="${BLUE}[*]${ENDCOLOR}"
+
+# TCP and UDP Nmap scans
+for ip in $(cat target.txt)
+do
+	# UDP Scan
+	printf "$SUCCESS Performing UDP Scans on $ip with Nmap...\n"
+	sudo nmap -Pn -T5 -sU -sV --top-ports=100 $ip -v | tee nmap-udp-top-100-$ip &>/dev/null &
+
+	# TCP Scan
+	printf "$SUCCESS Performing TCP Scans on $ip with Nmap...\n" 
+	sudo nmap -Pn -T5 -p- $ip -v | tee nmap-tcp-$ip &>/dev/null &
+done
+wait 
+
+printf "$SUCCESS AUTORECON commands below at once below to run afterwards $SUCCESS:\n"
+
+for file in $(ls | grep 'nmap-tcp')
+do
+	ports=$(cat $file | grep Discovered | awk -F " " '{print substr($4,1,length($4)-4)}')
+	ip=$(echo $file | awk -F "-" '{print $3}')
+	#echo "IP: $ip"
+	#echo "Ports: $(echo $ports | tr ' ' ',')"
+	printf "autorecon $ip -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-larger-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt\n\n\n"
+	#autorecon $ip -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-larger-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
+done
