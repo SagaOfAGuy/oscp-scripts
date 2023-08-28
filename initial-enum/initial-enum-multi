@@ -16,16 +16,16 @@ INFO="${BLUE}[*]${ENDCOLOR}"
 for ip in $(cat target.txt)
 do
 	# UDP Scan
-	printf "$SUCCESS Performing UDP Scans on $ip with Nmap...\n"
+	printf "$SUCCESS Performing UDP Scans on $ip with Nmap...\n$INFO Command being executed: sudo nmap -Pn -T5 -sU -sV --top-ports=100 $ip -v\n"
 	sudo nmap -Pn -T5 -sU -sV --top-ports=100 $ip -v | tee nmap-udp-top-100-$ip &>/dev/null &
 
 	# TCP Scan
-	printf "$SUCCESS Performing TCP Scans on $ip with Nmap...\n" 
-	sudo nmap -Pn -T5 -p- $ip -v | tee nmap-tcp-$ip &>/dev/null &
+	printf "\n$SUCCESS Performing TCP Scans on $ip with Nmap...\n$INFO sudo nmap -Pn -T5 -p- $ip -v\n" 
+	sudo nmap -sV -Pn -T5 -p- $ip -v | tee nmap-tcp-$ip &>/dev/null &
 done
 wait 
 
-printf "$SUCCESS AUTORECON commands below at once below to run afterwards $SUCCESS:\n"
+printf "\n$SUCCESS AUTORECON commands below at once below to run afterwards $SUCCESS:\n"
 
 for file in $(ls | grep 'nmap-tcp')
 do

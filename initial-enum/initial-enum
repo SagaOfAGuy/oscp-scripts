@@ -14,19 +14,27 @@ ENDCOLOR="\e[0m"
 SUCCESS="${GREEN}[+]${ENDCOLOR}"
 INFO="${BLUE}[*]${ENDCOLOR}"
 
+
+
 # Run nmap top 100 UDP scan first
 printf "$SUCCESS Performing UDP Scans with Nmap...\n"
 sudo nmap -T5 -sU -sV --top-ports=100 $1 -v | tee nmap-udp-top-100-$1.txt 
-sudo nmap -T5 -sU -sV --top-ports=10 $1 -v | tee nmap-udp-top-10-$1.txt 
 
 # Function that performs enumeration
 printf "$SUCCESS Scanning $1 with Nmap...\n" 
+
+
 ports=$(sudo nmap -Pn -T5 -p- $1 -v | grep Discovered | awk -F " " '{print substr($4,1,length($4)-4)}')
+
+
 printf "$SUCCESS Ports found by nmap:\n"
 for port in `echo $ports`; 
 do
 	printf "$INFO $port\n"
 done
+
+printf "\n\n$INFO Commands that have been run:\nUDP Scan: sudo nmap -Pn -T5 -sU -sV --top-ports=100 $1 -v\nTCP Scan: sudo nmap -Pn -T5 -sV -p- $1\nAutorecon command: autorecon $1 -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt\n\n\n"
+
 
 printf "$PLUS Running autorecon now...\n"
 autorecon $1 -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
