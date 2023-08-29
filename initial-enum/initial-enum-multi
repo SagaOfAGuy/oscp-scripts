@@ -1,6 +1,10 @@
 #!/bin/bash
 
+# Create target.txt file in current directory
 touch -a ./target.txt
+
+# Remove commands_run.txt file if it exists
+rm -rf ./commands_run.txt
 
 # Check if target.txt is empty. Exit if empty
 [ -s ./target.txt ] && (echo "target.txt is loaded!") || (echo "target.txt is empty. Please populate target.txt with target IPs and try again" && exit)
@@ -18,10 +22,13 @@ do
 	# UDP Scan
 	printf "$SUCCESS Performing UDP Scans on $ip with Nmap...\n$INFO Command being executed: sudo nmap -Pn -T5 -sU -sV --top-ports=100 $ip -v\n"
 	sudo nmap -Pn -T5 -sU -sV --top-ports=100 $ip -v | tee nmap-udp-top-100-$ip &>/dev/null &
-
+	printf "$ip Nmap scan commands\n" >> commands_run.txt
+	printf "UDP Scan: sudo nmap -Pn -T5 -sU -sV --top-ports=100 $ip -v\n" >> commands_run.txt
+	
 	# TCP Scan
-	printf "\n$SUCCESS Performing TCP Scans on $ip with Nmap...\n$INFO sudo nmap -Pn -T5 -p- $ip -v\n" 
+	printf "\n$SUCCESS Performing TCP Scans on $ip with Nmap...\n$INFO sudo nmap -sV -Pn -T5 -p- $ip -v\n" 
 	sudo nmap -sV -Pn -T5 -p- $ip -v | tee nmap-tcp-$ip &>/dev/null &
+	printf "TCP Scan: sudo nmap -sV -Pn -T5 -p- $ip -v\n\n" >> commands_run.txt
 done
 wait 
 
@@ -31,8 +38,8 @@ for file in $(ls | grep 'nmap-tcp')
 do
 	ports=$(cat $file | grep Discovered | awk -F " " '{print substr($4,1,length($4)-4)}')
 	ip=$(echo $file | awk -F "-" '{print $3}')
-	#echo "IP: $ip"
-	#echo "Ports: $(echo $ports | tr ' ' ',')"
-	printf "autorecon $ip -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-larger-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt\n\n\n"
-	#autorecon $ip -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-larger-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
+	printf "$ip Autorecon Scan:\n" >> commands_run.txt
+	printf "autorecon $ip -p $(echo $ports | tr ' ' ',') --dirbuster.wordlist /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt /usr/share/wordlists/seclists/Discovery/Web-Content/raft-larger-files.txt /usr/share/wordlists/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt\n\n\n" | tee -a commands_run.txt
+	
+	
 done
