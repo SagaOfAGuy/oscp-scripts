@@ -24,7 +24,8 @@ remote_links =[
     'https://github.com/AlessandroZ/LaZagne/releases/download/v2.4.5/LaZagne.exe',
     'https://github.com/nicocha30/ligolo-ng/releases/download/v0.4.3/ligolo-ng_agent_0.4.3_Windows_64bit.zip',
     'https://github.com/nicocha30/ligolo-ng/releases/download/v0.4.3/ligolo-ng_agent_0.4.3_Linux_64bit.tar.gz',
-    'https://github.com/BeichenDream/GodPotato/releases/download/V1.20/GodPotato-NET4.exe'
+    'https://github.com/BeichenDream/GodPotato/releases/download/V1.20/GodPotato-NET4.exe',
+    'https://github.com/antonioCoco/JuicyPotatoNG/releases/download/v1.1/JuicyPotatoNG.zip'
 ]
 
 # Local links for windows privesc tools
