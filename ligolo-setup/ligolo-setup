@@ -41,7 +41,7 @@ unzip ligolo-ng_agent_0.4.3_Windows_64bit.zip  && [ -f agent.exe ] && printf "$P
 
 # Create network interface for ligolo-ng on attack machine
 ## Delete ligolo interface if interface already exists and create a new one
-sudo ip tuntap add user kali mode tun ligolo && printf "$PLUS Creating ligolo network interface...\n\n\n"
+sudo ip tuntap add user $USERNAME mode tun ligolo && printf "$PLUS Creating ligolo network interface...\n\n\n"
 sudo ip link set ligolo up && printf "$PLUS Turned on ligolo interface\n\n\n" && sudo ip route add $2/24 dev ligolo && ip route list && printf "$PLUS Created tunneling route interface\n\n\n"
 
 # Instructions on how to setup a network pivot
