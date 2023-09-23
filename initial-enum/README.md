@@ -41,6 +41,6 @@ echo '192.168.1.101' >> target.txt
 ```
 6. Run script
 ```bash
-sudo initial-enum-multi.sh
+sudo initial-enum-multi
 ```
 
